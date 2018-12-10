@@ -39,16 +39,54 @@ lcd.o: lcd.h
 [tab] gcc -c lcd.c  
 
 monitor.o: monitor.h lcd.h  
-[tab] rm *.o  
-[tab] rm *.elf  
+[tab] -rm *.o  
+[tab] -rm *.elf  
 ```
 Wichtig hierbei ist es auf die Formatierung zu achten und bei [tab] einen Tabulator zu setzen. Da ansonsten das Makefile nicht funktioniert.  
 ### Im Terminal  
 Gibt man den Befehl ```make``` in der Console ein, sucht sich das make-tool selbstständig anhand des Makefiles die benötigten Dateien um die Anforderungen des Makefiles zu erfüllen.  
-Fals eine *.c Datei einen jüngeren Zeitstempel als die anderen *.c Dateien hat, wird diese neu Kompiliert und an das Projekt angefügt(gelinkt). 
+Fals eine *.c Datei einen jüngeren Zeitstempel als die anderen *.c Dateien hat, wird diese neu Kompiliert und an das Projekt angefügt(gelinkt).  
+Im Grunde Läuft die Abarbeitung eines Makefiles solange kein Fehler auftritt. Das Stoppen bei Fehlern kann speziell kritisch werden, wenn gerade ein Befehl ausgeführt wird. Um dieses Problem vorzubeugen, wird vor ```rm``` ein ```-``` gesetzt. Dies führt dazu, dass auch bei einem Fehler, der Löschbefehl ausgeführt wird.
 
+#### Touch  
+Mit ```touch``` kann man den Zeitstempel von Dateien manuell ändern. Falls noch keine Datei vorhanden ist, erzeugt touch eine neue leere Datei. 
 
+## Übung mit dem Make-tool  
+Mit hilfe des nano Editors soll "Hallo, Guten Morgen!" im Terminal ausgegeben werden.  
+Der Quelltext der main.c Datei sieht wie folgt aus:
+```
+#include <stdio.h>  
 
+int main(){  
+  
+printf("Hallo, Guten Morgen!\n");  
+return 0;  
+  
+}  
+```  
+Das Makefile für diese Aufgabe sieht wie folgt aus:
+```  
+#Dies ist ein Komentar  
+  
+test1: main.o  
+  gcc -o test1 main.o
 
+main.o: main.c
+  gcc -o main.c  
+    
+cleanAndBuild: clean test1
+  
+clean:
+  -rm main.o  
+  -rm test1  
+  
+```  
+Nun kann die Abarbeitung mit dem Befehl ```make``` gestartet werden.
+#### Befehle aus dem Unterricht
+Befehl    | Beschreibung  
+--------- | -------------  
+make clean| Alle von ```make``` erstellten Datein werden gelöscht  
+make cleanAndBuild| Alle von ```make``` erstellten Dateien erden gelöscht und danach wider erstellt   
+make main.o | Der Quelltext wird in eine Object Datei umgewandelt
 
 
